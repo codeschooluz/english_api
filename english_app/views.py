@@ -4,18 +4,30 @@ from .models import Question
 
 @api_view(['GET'])
 def home(request):
-    return Response({'status':'ok'})
+    data = Question.objects.all()
+    lst = []
+    for i in data:
+        dct = {}
+        dct['name'] = i.name
+        dct['question'] = i.question
+        dct['answer'] = i.answer
+        lst.append(dct)
+    return Response({'status':'ok', 'data':lst})
 
 @api_view(['GET'])
 def get_data(request):
     raw = request.GET
+    print(raw)
     data = Question.objects.filter(name=raw.get('name'))
-    dct = {}
+    print(data)
+    lst = []
     for i in data:
+        dct ={}
         dct['question'] = i.question
         dct['answer'] = i.answer
+        lst.append(dct)
 
-    return Response({"data":data})
+    return Response({"data":lst})
 
 @api_view(['POST'])
 def put_data(request):
